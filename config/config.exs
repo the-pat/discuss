@@ -29,7 +29,7 @@ config :phoenix, :json_library, Jason
 config :ueberauth, Ueberauth,
   providers: [github: {Ueberauth.Strategy.Github, []}]
 
-config :ueberauth, Ueberauth.Strategy.Github.Oauth,
+config :ueberauth, Ueberauth.Strategy.Github.OAuth,
   client_id: "client_id",
   client_secret: "client_secret"
 
