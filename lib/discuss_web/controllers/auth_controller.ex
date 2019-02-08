@@ -2,7 +2,21 @@ defmodule DiscussWeb.AuthController do
   use DiscussWeb, :controller
   plug Ueberauth
 
-  def callback(conn, params) do
-    
+  alias Discuss.Identity
+  alias Discuss.Identity.User
+
+  def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
+    user_params = %{token: auth.credentials.token, email: auth.info.email, provider: auth.provider}
+
+    case Identity.create_user(user_params) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:info, "Logged in successful.")
+        |> redirect(to: Routes.topic_path(conn, :index))
+      {:error, %Ecto.Changeset{} = changeset} ->
+        conn
+        |> put_flash(:warn, )
+        |> redirect(to: Routes.topic_path(conn, :index))
+    end
   end
 end
