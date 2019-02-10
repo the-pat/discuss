@@ -49,8 +49,9 @@ defmodule Discuss.Discussion do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_topic(attrs \\ %{}) do
-    %Topic{}
+  def create_topic(%Discuss.Identity.User{} = user, attrs \\ %{}) do
+    user
+    |> Ecto.build_assoc(:topics)
     |> Topic.changeset(attrs)
     |> Repo.insert()
   end

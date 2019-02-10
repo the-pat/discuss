@@ -4,6 +4,8 @@ defmodule DiscussWeb.TopicController do
   alias Discuss.Discussion
   alias Discuss.Discussion.Topic
 
+  plug DiscussWeb.Plugs.RequireAuth when action in [:new, :create, :edit, :update, :delete]
+
   def index(conn, _params) do
     topics = Discussion.list_topics()
     render(conn, "index.html", topics: topics)
@@ -15,7 +17,7 @@ defmodule DiscussWeb.TopicController do
   end
 
   def create(conn, %{"topic" => topic_params}) do
-    case Discussion.create_topic(topic_params) do
+    case Discussion.create_topic(conn.assigns.user, topic_params) do
       {:ok, topic} ->
         conn
         |> put_flash(:info, "Topic created successfully.")
