@@ -29,19 +29,19 @@ defmodule DiscussWeb.TopicController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    topic = Discussion.get_topic!(id)
+  def show(conn, %{"id" => topic_id}) do
+    topic = Discussion.get_topic!(topic_id)
     render(conn, "show.html", topic: topic)
   end
 
-  def edit(conn, %{"id" => id}) do
-    topic = Discussion.get_topic!(id)
+  def edit(conn, %{"id" => topic_id}) do
+    topic = conn.assigns.topic || Discussion.get_topic!(topic_id)
     changeset = Discussion.change_topic(topic)
     render(conn, "edit.html", topic: topic, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "topic" => topic_params}) do
-    topic = Discussion.get_topic!(id)
+  def update(conn, %{"id" => topic_id, "topic" => topic_params}) do
+    topic = conn.assigns.topic || Discussion.get_topic!(topic_id)
 
     case Discussion.update_topic(topic, topic_params) do
       {:ok, topic} ->
@@ -54,8 +54,8 @@ defmodule DiscussWeb.TopicController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    topic = Discussion.get_topic!(id)
+  def delete(conn, %{"id" => topic_id}) do
+    topic = conn.assigns.topic || Discussion.get_topic!(topic_id)
     {:ok, _topic} = Discussion.delete_topic(topic)
 
     conn
@@ -64,8 +64,9 @@ defmodule DiscussWeb.TopicController do
   end
 
   def check_topic_owner(%{params: %{"id" => topic_id}} = conn, _params) do
-    if conn.assigns.user && Discussion.get_topic!(topic_id).user_id == conn.assigns.user.id do
+    if (topic = conn.assigns.user && Discussion.get_topic!(topic_id)).user_id == conn.assigns.user.id do
       conn
+      |> assign(:topic, topic)
     else
       conn
       |> put_flash(:error, "You cannot mess with this topic!")
