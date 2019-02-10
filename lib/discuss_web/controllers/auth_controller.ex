@@ -25,6 +25,7 @@ defmodule DiscussWeb.AuthController do
         |> put_flash(:info, "Welcome back!")
         |> put_session(:user_id, user.id)
         |> redirect(to: Routes.topic_path(conn, :index))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         conn
         |> put_flash(:error, "Error signing in.")

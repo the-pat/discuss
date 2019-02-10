@@ -30,8 +30,11 @@ defmodule Discuss.Identity do
 
   def create_or_update_user(%{email: email} = attrs) do
     case get_user_by_email(email) do
-      nil -> create_user(attrs)
-      user -> update_user(user, attrs)
+      nil ->
+        create_user(attrs)
+
+      user ->
+        update_user(user, attrs)
     end
   end
 end

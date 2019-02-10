@@ -18,6 +18,7 @@ defmodule DiscussWeb.Plugs.RequireAuth do
     case conn.assigns[:user] do
       %User{} ->
         conn
+
       _ ->
         conn
         |> put_flash(:error, "You must be logged in.")
