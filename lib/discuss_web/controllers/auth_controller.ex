@@ -11,6 +11,13 @@ defmodule DiscussWeb.AuthController do
     signin(conn, user_params)
   end
 
+  def signout(conn, _params) do
+    conn
+    |> configure_session(drop: true)
+    |> put_flash(:info, "Signed out!")
+    |> redirect(to: Routes.topic_path(conn, :index))
+  end
+
   defp signin(conn, user_params) do
     case Identity.create_or_update_user(user_params) do
       {:ok, user} ->
