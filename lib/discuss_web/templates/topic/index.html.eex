@@ -1,19 +1,23 @@
-<h4>Topics</h4>
+<h1 class="header">Topics</h1>
 <ul class="collection">
   <%= for topic <- @topics do %>
     <li class="collection-item">
-      <%= link topic.title, to: Routes.topic_path(@conn, :show, topic) %>
+      <%= link topic.title, to: Routes.topic_path(@conn, :show, topic), class: "waves-effect waves-light" %>
       <%= if @conn.assigns.user && @conn.assigns.user.id == topic.user_id do %>
-        <div class="right">
-          <%= link "Edit", to: Routes.topic_path(@conn, :edit, topic) %>
-          <%= link "Delete", to: Routes.topic_path(@conn, :delete, topic), method: :delete %>
+        <div class="secondary-content">
+          <%= link to: Routes.topic_path(@conn, :edit, topic), class: "waves-effect waves-light" do %>
+            <i class="material-icons">edit</i>
+          <% end %>
+          <%= link to: Routes.topic_path(@conn, :delete, topic), method: :delete, class: "waves-effect waves-light" do %>
+            <i class="material-icons">delete</i>
+          <% end %>
         </div>
       <% end %>
     </li>
   <% end %>
 </ul>
 <div class="fixed-action-btn">
-  <%= link to: Routes.topic_path(@conn, :new), class: "btn-floating btn-large waves-effect waves-light red" do %>
+  <%= link to: Routes.topic_path(@conn, :new), class: "btn-floating btn-large waves-effect waves-light" do %>
     <i class="large material-icons">add</i>
   <% end %>
 </div>

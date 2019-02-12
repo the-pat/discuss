@@ -2,6 +2,50 @@
 
 @import "./phoenix.css";
 
-* {
+html {
   font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+}
+
+nav {
+  margin-bottom: 1.5rem;
+}
+
+nav .brand-logo {
+  position: static;
+}
+
+a {
+  color: #26a69a;
+}
+
+a:hover {
+  color: #606c76;
+}
+
+.input-field input[type="text"] {
+  font-size: 2rem;
+}
+
+.header {
+  color: #ee6e73;
+  font-weight: 300;
+}
+
+.secondary-content a {
+  margin-left: 1rem;
+}
+
+.secondary-content a:first-child {
+  margin-left: inherit;
+}
+
+.input-field > label {
+  font-size: 2.5rem;
+  font-weight: 200;
+  line-height: 0.5rem;
+}
+
+.margin-bottom-0 {
+  margin-bottom: 0;
 }

@@ -1,4 +1,4 @@
-<h4>New Topic</h4>
+<h1 class="header">Create Topic</h1>
 
 <%= render "form.html", Map.put(assigns, :action, Routes.topic_path(@conn, :create)) %>
 <!--<%= link "Back", to: Routes.topic_path(@conn, :index), class: "btn-flat" %>-->

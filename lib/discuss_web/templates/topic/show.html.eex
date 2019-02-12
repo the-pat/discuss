@@ -1,11 +1,8 @@
-<h1>Show Topic</h1>
+<h1 class="header"><%= @topic.title %></h1>
 
-<ul>
-  <li>
-    <strong>Title:</strong>
-    <%= @topic.title %>
-  </li>
-</ul>
-
-<span><%= link "Edit", to: Routes.topic_path(@conn, :edit, @topic) %></span>
-<span><%= link "Back", to: Routes.topic_path(@conn, :index) %></span>
+<span>
+  <%= link "Edit", to: Routes.topic_path(@conn, :edit, @topic), class: "waves-effect waves-light btn-large" %>
+</span>
+<span>
+  <%= link "Back", to: Routes.topic_path(@conn, :index), class: "waves-effect waves-light btn-flat  btn-large" %>
+</span>
