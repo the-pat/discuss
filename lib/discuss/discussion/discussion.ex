@@ -7,6 +7,7 @@ defmodule Discuss.Discussion do
   alias Discuss.Repo
 
   alias Discuss.Discussion.Topic
+  alias Discuss.Discussion.Comment
 
   @doc """
   Returns the list of topics.
@@ -101,5 +102,29 @@ defmodule Discuss.Discussion do
   """
   def change_topic(%Topic{} = topic) do
     Topic.changeset(topic, %{})
+  end
+
+  def get_comment!(id), do: Repo.get!(Comment, id)
+
+  def create_comment(%Topic{} = topic, %Discuss.Identity.User{} = user, attrs \\ %{}) do
+    topic
+    |> Ecto.build_assoc(:comments)
+    |> Comment.changeset(attrs)
+    |> Ecto.put_assoc(:user, user)
+    |> Repo.insert()
+  end
+
+  def update_comment(%Comment{} = comment, attrs) do
+    comment
+    |> Comment.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def delete_comment(%Comment{} = comment) do
+    Repo.delete(comment)
+  end
+
+  def change_comment(%Comment{} = comment) do
+    Comment.changeset(comment, %{})
   end
 end
