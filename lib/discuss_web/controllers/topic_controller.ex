@@ -14,7 +14,6 @@ defmodule DiscussWeb.TopicController do
 
   def new(conn, _params) do
     changeset = Discussion.change_topic(%Topic{})
-
     render(conn, "new.html", changeset: changeset)
   end
 
@@ -38,7 +37,6 @@ defmodule DiscussWeb.TopicController do
   def edit(conn, %{"id" => topic_id}) do
     topic = conn.assigns.topic || Discussion.get_topic!(topic_id)
     changeset = Discussion.change_topic(topic)
-
     render(conn, "edit.html", topic: topic, changeset: changeset)
   end
 
