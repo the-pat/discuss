@@ -6,3 +6,8 @@
 <span>
   <%= link "Back", to: Routes.topic_path(@conn, :index), class: "waves-effect waves-light btn-flat  btn-large" %>
 </span>
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', () => {
+    window.joinDiscussion(<%= @topic.id %>);
+  });
+</script>
