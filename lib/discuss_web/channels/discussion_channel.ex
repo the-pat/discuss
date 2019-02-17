@@ -1,13 +1,28 @@
 defmodule DiscussWeb.DiscussionChannel do
   use Phoenix.Channel
 
+  alias Discuss.Discussion
+
   def join("discussion:" <> topic_id, _params, socket) do
-    # TODO: send all of the comments for the given topic
-    {:ok, %{topic_id: topic_id}, socket}
+    topic =
+      topic_id
+      |> String.to_integer()
+      |> Discussion.get_topic!(true)
+
+    {:ok, %{comments: topic.comments}, assign(socket, :topic, topic)}
   end
 
-  def handle_in(name, message, socket) do
-    # TODO: save the comment and update the clients
+  def handle_in("discussion:comment", %{"content" => content}, socket) do
+    topic = socket.assigns.topic
+
+    case Discussion.create_comment(topic, %{content: content}) do
+     {:ok, comment} ->
+       broadcast!(socket, "discussion:#{socket.assigns.topic_id}:new", %{comment: comment})
+       {:reply, :ok, socket}
+     {:error, _reason} ->
+       {:reply, {:error, %{errors: :wat}}, socket}
+    end
+
     {:reply, :ok, socket}
   end
 end

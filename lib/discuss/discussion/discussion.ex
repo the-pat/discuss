@@ -5,9 +5,8 @@ defmodule Discuss.Discussion do
 
   import Ecto.Query, warn: false
   alias Discuss.Repo
-
-  alias Discuss.Discussion.Topic
-  alias Discuss.Discussion.Comment
+  alias Discuss.Discussion.{Topic, Comment}
+  alias Discuss.Identity.User
 
   @doc """
   Returns the list of topics.
@@ -36,7 +35,16 @@ defmodule Discuss.Discussion do
       ** (Ecto.NoResultsError)
 
   """
-  def get_topic!(id), do: Repo.get!(Topic, id)
+  def get_topic!(id, preload? \\ false) do
+    case preload? do
+      true ->
+        Topic
+        |> Repo.get!(id)
+        |> Repo.preload(:comments)
+      false ->
+        Repo.get!(Topic, id)
+    end
+  end
 
   @doc """
   Creates a topic.
@@ -50,10 +58,9 @@ defmodule Discuss.Discussion do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_topic(%Discuss.Identity.User{} = user, attrs \\ %{}) do
-    user
-    |> Ecto.build_assoc(:topics)
-    |> Topic.changeset(attrs)
+  def create_topic(%User{} = user, attrs \\ %{}) do
+    %Topic{}
+    |> Topic.changeset(attrs, user)
     |> Repo.insert()
   end
 
@@ -106,11 +113,15 @@ defmodule Discuss.Discussion do
 
   def get_comment!(id), do: Repo.get!(Comment, id)
 
-  def create_comment(%Topic{} = topic, %Discuss.Identity.User{} = user, attrs \\ %{}) do
-    topic
-    |> Ecto.build_assoc(:comments)
-    |> Comment.changeset(attrs)
-    |> Ecto.put_assoc(:user, user)
+  #def create_comment(%Topic{} = topic, %User{} = user, attrs \\ %{}) do
+  #  %Comment{}
+  #  |> Comment.changeset(attrs, topic, user)
+  #  |> Repo.insert()
+  #end
+
+  def create_comment(%Topic{} = topic, attrs \\ %{}) do
+    %Comment{}
+    |> Comment.changeset(attrs, topic)
     |> Repo.insert()
   end
 

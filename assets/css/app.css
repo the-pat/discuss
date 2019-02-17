@@ -23,6 +23,10 @@ a:hover {
   color: #606c76;
 }
 
+.input-field > label.unset {
+  font-size: unset;
+}
+
 .input-field input[type="text"] {
   font-size: 2rem;
 }

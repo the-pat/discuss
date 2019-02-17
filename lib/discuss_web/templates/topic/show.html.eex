@@ -1,13 +1,28 @@
 <h1 class="header"><%= @topic.title %></h1>
 
-<span>
-  <%= link "Edit", to: Routes.topic_path(@conn, :edit, @topic), class: "waves-effect waves-light btn-large" %>
-</span>
+<div class="row">
+  <div class="input-field col s8 pull-s4">
+    <textarea id="comment" class="materialize-textarea"></textarea>
+    <label for="comment" class="unset">What are your thoughts?</label>
+    <button id="submit-comment" class="btn">Comment</button>
+  </div>
+</div>
+<ul id="comment-list" class="collection hide"></ul>
+
+<%= if @conn.assigns.user && @conn.assigns.user.id == @topic.user_id do %>
+  <span>
+    <%= link "Edit", to: Routes.topic_path(@conn, :edit, @topic), class: "waves-effect waves-light btn-large" %>
+  </span>
+<% end %>
 <span>
   <%= link "Back", to: Routes.topic_path(@conn, :index), class: "waves-effect waves-light btn-flat  btn-large" %>
 </span>
 <script type="text/javascript">
   document.addEventListener('DOMContentLoaded', () => {
-    window.joinDiscussion(<%= @topic.id %>);
+    const textarea = document.getElementById('comment');
+    const button = document.getElementById('submit-comment');
+    const list = document.getElementById('comment-list');
+
+    window.joinDiscussion(<%= @topic.id %>, {textElement: textarea, clickElement: button, listElement: list});
   });
 </script>
