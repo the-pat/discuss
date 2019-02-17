@@ -13,16 +13,10 @@ defmodule Discuss.Discussion.Topic do
     timestamps()
   end
 
-  def changeset(topic, attrs, %User{} = user) do
-    topic
-    |> cast(attrs, [:title])
-    |> validate_required([:title])
-    |> put_assoc(:user, user)
-  end
-
   def changeset(topic, attrs) do
     topic
-    |> cast(attrs, [:title])
-    |> validate_required([:title])
+    |> cast(attrs, [:title, :user_id])
+    |> validate_required([:title, :user_id])
+    |> foreign_key_constraint(:user_id)
   end
 end

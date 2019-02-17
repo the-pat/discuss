@@ -5,7 +5,7 @@ defmodule Discuss.Discussion.Comment do
   alias Discuss.Discussion.Topic
   alias Discuss.Identity.User
 
-  @derive {Jason.Encoder, only: [:content]}
+  @derive {Jason.Encoder, only: [:content, :user]}
 
   schema "comments" do
     field :content, :string
@@ -15,24 +15,11 @@ defmodule Discuss.Discussion.Comment do
     timestamps()
   end
 
-  def changeset(comment, %Topic{} = topic, %User{} = user, attrs) do
-    comment
-    |> cast(attrs, [:content])
-    |> validate_required([:content])
-    |> put_assoc(:topic, topic)
-    |> put_assoc(:user, user)
-  end
-
-  def changeset(comment, attrs, %Topic{} = topic) do
-    comment
-    |> cast(attrs, [:content])
-    |> validate_required([:content])
-    |> put_assoc(:topic, topic)
-  end
-
   def changeset(comment, attrs) do
     comment
-    |> cast(attrs, [:content])
-    |> validate_required([:content])
+    |> cast(attrs, [:content, :topic_id, :user_id])
+    |> validate_required([:content, :topic_id, :user_id])
+    |> foreign_key_constraint(:topic_id)
+    |> foreign_key_constraint(:user_id)
   end
 end

@@ -1,14 +1,13 @@
 <h1 class="header"><%= @topic.title %></h1>
 
 <div class="row">
-  <div class="input-field col s8 pull-s4">
+  <div class="input-field col s12 m8 pull-m4">
     <textarea id="comment" class="materialize-textarea"></textarea>
     <label for="comment" class="unset">What are your thoughts?</label>
     <button id="submit-comment" class="btn">Comment</button>
   </div>
 </div>
 <ul id="comment-list" class="collection hide"></ul>
-
 <%= if @conn.assigns.user && @conn.assigns.user.id == @topic.user_id do %>
   <span>
     <%= link "Edit", to: Routes.topic_path(@conn, :edit, @topic), class: "waves-effect waves-light btn-large" %>

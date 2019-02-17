@@ -40,7 +40,7 @@ defmodule Discuss.Discussion do
       true ->
         Topic
         |> Repo.get!(id)
-        |> Repo.preload(:comments)
+        |> Repo.preload(comments: [:user])
       false ->
         Repo.get!(Topic, id)
     end
@@ -58,9 +58,13 @@ defmodule Discuss.Discussion do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_topic(%User{} = user, attrs \\ %{}) do
+  def create_topic(user_id, attrs) do
+    attrs =
+      attrs
+      |> Map.put("user_id", user_id)
+
     %Topic{}
-    |> Topic.changeset(attrs, user)
+    |> Topic.changeset(attrs)
     |> Repo.insert()
   end
 
@@ -113,15 +117,14 @@ defmodule Discuss.Discussion do
 
   def get_comment!(id), do: Repo.get!(Comment, id)
 
-  #def create_comment(%Topic{} = topic, %User{} = user, attrs \\ %{}) do
-  #  %Comment{}
-  #  |> Comment.changeset(attrs, topic, user)
-  #  |> Repo.insert()
-  #end
+  def create_comment(topic_id, user_id, attrs) do
+    attrs =
+      attrs
+      |> Map.put(:topic_id, topic_id)
+      |> Map.put(:user_id, user_id)
 
-  def create_comment(%Topic{} = topic, attrs \\ %{}) do
     %Comment{}
-    |> Comment.changeset(attrs, topic)
+    |> Comment.changeset(attrs)
     |> Repo.insert()
   end
 

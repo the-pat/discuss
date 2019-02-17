@@ -18,7 +18,18 @@ const renderComment = (listElement) => (comment) => {
   listElement.classList.remove('hide');
 };
 
-const commentTemplate = (comment) => `<li class="collection-item">${comment.content}</li>`;
+const commentTemplate = (comment) => {
+  let email = 'anonymous';
+  if (comment.user) {
+    email = comment.user.email;
+  }
+
+  return `
+    <li class="collection-item">
+      ${comment.content}
+      <div class="secondary-content">${email}</div>
+    </li>`;
+};
 
 const joinDiscussion = (socket) => (topicId, {textElement, clickElement, listElement}) => {
   const channel = socket.channel(`discussion:${topicId}`, {});
