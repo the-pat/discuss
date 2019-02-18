@@ -12,17 +12,17 @@ defmodule DiscussWeb.DiscussionChannel do
     {:ok, %{comments: topic.comments}, assign(socket, :topic, topic)}
   end
 
-  def handle_in("discussion:comment", %{"content" => content}, socket) do
-    topic_id = socket.assigns.topic.id
-    user_id = socket.assigns.user_id
-
-    case Discussion.create_comment(topic_id, user_id, %{content: content}) do
+  def handle_in("discussion:comment", %{"content" => content}, %Phoenix.Socket{assigns: %{user_id: user_id, topic: topic}} = socket) do
+    case Discussion.create_comment(topic.id, user_id, %{content: content}) do
      {:ok, comment} ->
-       broadcast!(socket, "discussion:#{topic_id}:new", %{comment: comment})
+       comment = %Discussion.Comment{comment | user: Identity.get_user!(user_id)}
+       broadcast!(socket, "discussion:#{topic.id}:new", %{comment: comment})
        {:reply, :ok, socket}
 
      {:error, %Ecto.Changeset{} = changeset} ->
        {:reply, {:error, %{errors: changeset}}, socket}
     end
   end
+
+  def handle_in("discussion:comment", _params, socket), do: {:reply, :error, socket}
 end

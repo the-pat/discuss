@@ -43,7 +43,7 @@ const joinDiscussion = (socket) => (topicId, {textElement, clickElement, listEle
     });
 
   channel.on(`discussion:${topicId}:new`, resp => {
-    renderComments(listElement)(resp.comment);
+    renderComment(listElement)(resp.comment);
   });
 
   clickElement.addEventListener('click', () => {
@@ -58,7 +58,12 @@ const joinDiscussion = (socket) => (topicId, {textElement, clickElement, listEle
 };
 
 export default (window) => {
-  const socket = new Socket("/socket", {params: {token: window.userToken}});
+  const params = {};
+  if (window.userToken) {
+    params.token = window.userToken;
+  }
+
+  const socket = new Socket("/socket", {params});
   socket.connect();
 
   return {
