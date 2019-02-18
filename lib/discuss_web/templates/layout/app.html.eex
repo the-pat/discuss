@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <%= if @conn.assigns.user do %>
       <script>
-        window.userToken = "<%= Phoenix.Token.sign(DiscussWeb.Endpoint, "key", @conn.assigns.user.id) %>";
+        window.userToken = "<%= Phoenix.Token.sign(DiscussWeb.Endpoint, Application.get_env(:discuss, DiscussWeb.Endpoint)[:socket_secret_key], @conn.assigns.user.id) %>";
       </script>
     <% end %>
   </head>
