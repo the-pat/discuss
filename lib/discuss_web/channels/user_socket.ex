@@ -1,6 +1,8 @@
 defmodule DiscussWeb.UserSocket do
   use Phoenix.Socket
 
+  alias Discuss.Identity
+
   channel "discussion:*", DiscussWeb.DiscussionChannel
 
   def connect(%{"token" => token}, socket, _connect_info) do
@@ -8,7 +10,7 @@ defmodule DiscussWeb.UserSocket do
 
     case Phoenix.Token.verify(socket, key, token, max_age: 86400) do
       {:ok, user_id} ->
-        {:ok, assign(socket, :user_id, user_id)}
+        {:ok, assign(socket, :user, Identity.get_user!(user_id))}
 
       {:error, _error} ->
         :error
