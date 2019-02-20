@@ -10,18 +10,19 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :discuss, DiscussWeb.Endpoint,
-  http: [port: System.get_env("PORT")],
-  url: [scheme: "https", host: "sleepy-crag-80240.herokuapp.com", port: 443],
+  load_from_system_env: true,
+  url: [scheme: "https", host: "patrickt-discuss.herokuapp.com", port: 443],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE"),
-  socket_secret_key: System.get_env("SOCKET_SECRET_KEY")
+  socket_secret_key: Map.fetch!(System.get_env(), "SOCKET_SECRET_KEY")
 
 # Do not print debug messages in production
 config :logger, level: :info
 
 # Configure your database
-config :hello, Hello.Repo,
+config :discuss, Discuss.Repo,
+  adapter: Ecto.Adapters.Postgres,
   url: System.get_env("DATABASE_URL"),
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
   ssl: true

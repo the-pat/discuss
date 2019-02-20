@@ -1,1 +1,1 @@
-web: MIX_ENV=prod elixir --sname server -S phx.server
+web: MIX_ENV=prod mix ecto.migrate && mix phx.server
