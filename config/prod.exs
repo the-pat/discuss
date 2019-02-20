@@ -11,6 +11,7 @@ use Mix.Config
 # before starting your production server.
 config :discuss, DiscussWeb.Endpoint,
   load_from_system_env: true,
+  http: [port: {:system, "PORT"}],
   url: [scheme: "https", host: "patrickt-discuss.herokuapp.com", port: 443],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json",
@@ -25,6 +26,7 @@ config :discuss, Discuss.Repo,
   adapter: Ecto.Adapters.Postgres,
   url: System.get_env("DATABASE_URL"),
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+  database: "discuss",
   ssl: true
 
 # Configure the GitHub OAuth secrets
